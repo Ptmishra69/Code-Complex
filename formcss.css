@@ -1,103 +1,150 @@
+/* Base Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #f5f5f5;
-    line-height: 1.6;
-}
-.layer {
-    background-color: white;
-    padding: 20px;
+    background: white;
+    padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-    display: none;
-    height: 500px;
-    overflow-y: auto;
-    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
-.active {
-    display: block;
-}
-h1, h2, h3 {
+
+h1 {
     color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
 }
-.timer {
-    color: #e74c3c;
-    font-weight: bold;
-    margin-top: 10px;
+
+h2 {
+    color: #3498db;
+    margin-top: 0;
 }
+
+/* Progress Bar */
 .progress-bar {
-    height: 5px;
-    background-color: #ecf0f1;
-    margin-bottom: 20px;
+    height: 10px;
+    background: #ecf0f1;
     border-radius: 5px;
+    margin-bottom: 30px;
+    overflow: hidden;
 }
+
 .progress {
     height: 100%;
-    background-color: #2ecc71;
-    border-radius: 5px;
+    background: #3498db;
     width: 0%;
-    transition: width 1s linear;
+    transition: width 0.5s ease;
 }
-.telegram-link {
-    display: inline-block;
-    margin: 20px 0;
-    padding: 12px 24px;
-    background-color: #0088cc;
-    color: white;
-    text-decoration: none;
+
+/* Layers */
+.layer {
+    display: none;
+    padding: 20px;
     border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s;
+    background: white;
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s ease;
 }
-.telegram-link:hover {
-    background-color: #006699;
+
+.layer.active {
+    display: block;
 }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Buttons */
 .next-btn {
-    position: sticky;
-    bottom: 20px;
-    background-color: #3498db;
+    background: #3498db;
     color: white;
     border: none;
     padding: 12px 24px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    transition: all 0.3s ease;
     margin-top: 20px;
-    display: block;
-    width: 100%;
-    transition: background-color 0.3s;
 }
+
 .next-btn:hover {
-    background-color: #2980b9;
+    background: #2980b9;
+    transform: translateY(-2px);
 }
-.next-btn:disabled {
-    background-color: #95a5a6;
+
+.next-btn:active {
+    transform: translateY(0);
+}
+
+.next-btn.disabled {
+    background: #95a5a6;
     cursor: not-allowed;
+    transform: none;
 }
-.section {
-    margin-bottom: 25px;
+
+/* Telegram Button */
+.telegram-btn {
+    background: #0088cc;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    display: inline-block;
+    text-decoration: none;
 }
-ul, ol {
-    padding-left: 20px;
+
+.telegram-btn:hover {
+    background: #0077b5;
+    transform: translateY(-2px);
 }
-li {
-    margin-bottom: 8px;
+
+.telegram-btn:active {
+    transform: translateY(0);
 }
-.highlight {
-    background-color: #fffde7;
-    padding: 15px;
-    border-left: 4px solid #ffd600;
-    margin: 15px 0;
-}
-.g-recaptcha {
-    margin: 20px 0;
-    display: none; /* Hidden by default, shown only on layer 2 */
-}
-.error-message {
+
+/* Timer */
+.timer {
     color: #e74c3c;
     margin-top: 10px;
+    font-size: 14px;
+    height: 20px;
+}
+
+/* Error Message */
+.error-message {
+    color: #e74c3c;
+    background: #fadbd8;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
     display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    button {
+        width: 100%;
+        padding: 12px;
+    }
 }
