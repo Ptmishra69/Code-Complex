@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Information</title>
+    <!-- Add reCAPTCHA API -->
+    <script src="https://www.google.com/recaptcha/api.js?render=YOUR_SITE_KEY"></script>
+    <link rel="stylesheet" href="formcss.css">
+</head>
+<body>
+    <h1>Travel Information Portal</h1>
+    <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- reCAPTCHA placeholder -->
+    <div id="recaptcha-container" class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+    <div id="recaptcha-error" class="error-message">Please verify you're not a robot to continue.</div>
+
+    <!-- Layer 1: Destination -->
+    <div class="layer active" id="layer1">
+        <h2>Popular Travel Destinations for 2023</h2>
+        
+        <!-- ... (rest of layer 1 content remains the same) ... -->
+        
+        <button class="next-btn" onclick="nextLayer(1)">Next</button>
+        <div class="timer" id="timer1"></div>
+    </div>
+
+    <!-- Layer 2: Travel Tips -->
+    <div class="layer" id="layer2">
+        <h2>Essential Travel Tips for Smart Explorers</h2>
+        
+        <!-- ... (rest of layer 2 content remains the same) ... -->
+        
+        <button class="next-btn" onclick="verifyBeforeProceeding(2)">Next</button>
+        <div class="timer" id="timer2"></div>
+    </div>
+
+    <!-- ... (rest of your layers remain the same) ... -->
+
+    <script src="formscript.js">
+        
+    </script>
+</body>
+</html>
