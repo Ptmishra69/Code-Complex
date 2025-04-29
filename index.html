@@ -3,42 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travel Information</title>
-    <!-- Add reCAPTCHA API -->
-    <script src="https://www.google.com/recaptcha/api.js?render=YOUR_SITE_KEY"></script>
+    <title>Travel Information Portal</title>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfflygrAAAAAIfZhYRK-8gKtA6wZF2D1B1R04mh"></script>
     <link rel="stylesheet" href="formcss.css">
 </head>
 <body>
-    <h1>Travel Information Portal</h1>
-    <div class="progress-bar">
-        <div class="progress" id="progress"></div>
+    <div class="container">
+        <h1>Travel Information Portal</h1>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <!-- reCAPTCHA elements -->
+        <div id="recaptcha-container" style="display: none;"></div>
+        <div id="recaptcha-error" class="error-message" style="display: none;">
+            Please verify you're not a robot to continue.
+        </div>
+
+        <!-- Layer 1: Destination -->
+        <div class="layer active" id="layer1">
+            <h2>Popular Travel Destinations for 2023</h2>
+            <p>Explore the most exciting destinations for your next adventure.</p>
+            <button class="next-btn" onclick="nextLayer(1)">Next</button>
+            <div class="timer" id="timer1"></div>
+        </div>
+
+        <!-- Layer 2: Travel Tips -->
+        <div class="layer" id="layer2">
+            <h2>Essential Travel Tips for Smart Explorers</h2>
+            <p>Important information to make your travels smoother.</p>
+            <button class="next-btn" onclick="verifyBeforeProceeding(2)">Next</button>
+            <div class="timer" id="timer2"></div>
+        </div>
+
+        <!-- Layer 3: Packing List -->
+        <div class="layer" id="layer3">
+            <h2>Smart Packing Checklist</h2>
+            <p>Never forget essential items again.</p>
+            <button class="next-btn" onclick="nextLayer(3)">Next</button>
+            <div class="timer" id="timer3"></div>
+        </div>
+
+        <!-- Layer 4: Safety -->
+        <div class="layer" id="layer4">
+            <h2>Travel Safety Guidelines</h2>
+            <p>Stay safe during your adventures.</p>
+            <button class="next-btn" onclick="nextLayer(4)">Next</button>
+            <div class="timer" id="timer4"></div>
+        </div>
+
+        <!-- Layer 5: Final -->
+        <div class="layer" id="layer5">
+            <h2>Ready for Your Adventure!</h2>
+            <p>Thank you for reviewing our travel information.</p>
+            <p>Join our Telegram community for more travel tips and updates:</p>
+            <a href="https://t.me/+0Mv3CHgj6GswYzJl" class="telegram-btn" target="_blank">
+                Join Telegram Group
+            </a>
+        </div>
     </div>
-
-    <!-- reCAPTCHA placeholder -->
-    <div id="recaptcha-container" class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
-    <div id="recaptcha-error" class="error-message">Please verify you're not a robot to continue.</div>
-
-    <!-- Layer 1: Destination -->
-    <div class="layer active" id="layer1">
-        <h2>Popular Travel Destinations for 2023</h2>
-        
-        <!-- ... (rest of layer 1 content remains the same) ... -->
-        
-        <button class="next-btn" onclick="nextLayer(1)">Next</button>
-        <div class="timer" id="timer1"></div>
-    </div>
-
-    <!-- Layer 2: Travel Tips -->
-    <div class="layer" id="layer2">
-        <h2>Essential Travel Tips for Smart Explorers</h2>
-        
-        <!-- ... (rest of layer 2 content remains the same) ... -->
-        
-        <button class="next-btn" onclick="verifyBeforeProceeding(2)">Next</button>
-        <div class="timer" id="timer2"></div>
-    </div>
-
-    <!-- ... (rest of your layers remain the same) ... -->
 
     <script src="formscript.js">
         
