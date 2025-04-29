@@ -1,95 +1,141 @@
-let currentLayer = 1;
-        const cooldownTime = 15; // 15 seconds cooldown
-        let cooldownInterval;
-        let canProceed = true;
-        let recaptchaExecuted = false;
+// Form state management
+const formState = {
+    currentLayer: 1,
+    totalLayers: 5,
+    cooldownTime: 15, // seconds
+    cooldownInterval: null,
+    canProceed: true,
+    recaptchaExecuted: false,
+    recaptchaToken: null
+};
 
-        // Initialize reCAPTCHA
-        function initRecaptcha() {
-            grecaptcha.ready(function() {
-                grecaptcha.execute('YOUR_SITE_KEY', {action: 'submit'}).then(function(token) {
+// Initialize the form when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initRecaptcha();
+    setupEventListeners();
+});
+
+// Set up event listeners
+function setupEventListeners() {
+    // Keyboard navigation support
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && formState.canProceed) {
+            const activeLayer = document.querySelector('.layer.active');
+            const currentLayerNum = parseInt(activeLayer.id.replace('layer', ''));
+            
+            if (currentLayerNum < formState.totalLayers) {
+                if (currentLayerNum === 2) {
+                    verifyBeforeProceeding(currentLayerNum);
+                } else {
+                    nextLayer(currentLayerNum);
+                }
+            }
+        }
+    });
+}
+
+// Initialize reCAPTCHA
+function initRecaptcha() {
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6LfflygrAAAAAIfZhYRK-8gKtA6wZF2D1B1R04mh', {action: 'submit'})
+            .then(function(token) {
+                formState.recaptchaToken = token;
+                formState.recaptchaExecuted = true;
+                document.getElementById('recaptcha-container').style.display = 'none';
+            })
+            .catch(function(error) {
+                console.error('reCAPTCHA error:', error);
+                setTimeout(() => {
+                    formState.recaptchaExecuted = true;
                     document.getElementById('recaptcha-container').style.display = 'none';
-                    recaptchaExecuted = true;
-                });
+                }, 3000);
             });
-        }
+    });
+}
 
-        // Special verification for layer 2
-        function verifyBeforeProceeding(layerNumber) {
-            if (!canProceed) return;
-            
-            if (layerNumber === 2 && !recaptchaExecuted) {
-                // Show reCAPTCHA and error message
-                document.getElementById('recaptcha-container').style.display = 'block';
-                document.getElementById('recaptcha-error').style.display = 'block';
-                initRecaptcha();
-                return;
-            }
-            
-            // If verification passed or not needed, proceed normally
-            nextLayer(layerNumber);
+// Verify before proceeding to layer 2
+function verifyBeforeProceeding(layerNumber) {
+    if (!formState.canProceed) return;
+    
+    if (layerNumber === 2 && !formState.recaptchaExecuted) {
+        document.getElementById('recaptcha-container').style.display = 'block';
+        document.getElementById('recaptcha-error').style.display = 'block';
+        
+        if (!formState.recaptchaToken) {
+            initRecaptcha();
         }
+        return;
+    }
+    
+    nextLayer(layerNumber);
+}
 
-        function nextLayer(layerNumber) {
-            if (!canProceed) return;
-            
-            // Hide current layer
-            document.getElementById(`layer${layerNumber}`).classList.remove('active');
-            
-            // Show next layer
-            currentLayer = layerNumber + 1;
-            document.getElementById(`layer${currentLayer}`).classList.add('active');
-            
-            // Update progress bar
-            updateProgress();
-            
-            // Start cooldown timer
-            startCooldown(currentLayer);
-            
-            // Scroll to top of new layer
-            document.getElementById(`layer${currentLayer}`).scrollTop = 0;
-            
-            // Hide any reCAPTCHA error messages
-            document.getElementById('recaptcha-error').style.display = 'none';
+// Proceed to next layer
+function nextLayer(layerNumber) {
+    if (!formState.canProceed) return;
+    
+    if (formState.cooldownInterval) {
+        clearInterval(formState.cooldownInterval);
+    }
+    
+    document.getElementById(`layer${layerNumber}`).classList.remove('active');
+    
+    formState.currentLayer = layerNumber + 1;
+    document.getElementById(`layer${formState.currentLayer}`).classList.add('active');
+    
+    updateProgress();
+    
+    if (formState.currentLayer < formState.totalLayers) {
+        startCooldown(formState.currentLayer);
+    }
+    
+    document.getElementById(`layer${formState.currentLayer}`).scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+    });
+    
+    document.getElementById('recaptcha-error').style.display = 'none';
+}
+
+// Start cooldown timer
+function startCooldown(layerNumber) {
+    formState.canProceed = false;
+    let timeLeft = formState.cooldownTime;
+    const timerElement = document.getElementById(`timer${layerNumber}`);
+    
+    const buttons = document.querySelectorAll('.next-btn');
+    buttons.forEach(button => {
+        button.disabled = true;
+        button.classList.add('disabled');
+    });
+    
+    if (timerElement) {
+        timerElement.textContent = `Please wait ${timeLeft} seconds before proceeding`;
+    }
+    
+    formState.cooldownInterval = setInterval(() => {
+        timeLeft--;
+        
+        if (timerElement) {
+            timerElement.textContent = timeLeft > 0 
+                ? `Please wait ${timeLeft} seconds before proceeding`
+                : '';
         }
-
-        function startCooldown(layerNumber) {
-            canProceed = false;
-            let timeLeft = cooldownTime;
-            const timerElement = document.getElementById(`timer${layerNumber}`);
+        
+        if (timeLeft <= 0) {
+            clearInterval(formState.cooldownInterval);
+            formState.canProceed = true;
             
-            // Disable next button during cooldown
-            const buttons = document.querySelectorAll(`#layer${layerNumber} .next-btn`);
             buttons.forEach(button => {
-                button.disabled = true;
+                button.disabled = false;
+                button.classList.remove('disabled');
             });
-            
-            if (timerElement) {
-                timerElement.textContent = `Please wait ${timeLeft} seconds before proceeding`;
-            }
-            
-            cooldownInterval = setInterval(() => {
-                timeLeft--;
-                if (timerElement) {
-                    timerElement.textContent = `Please wait ${timeLeft} seconds before proceeding`;
-                }
-                
-                if (timeLeft <= 0) {
-                    clearInterval(cooldownInterval);
-                    if (timerElement) {
-                        timerElement.textContent = '';
-                    }
-                    canProceed = true;
-                    
-                    // Re-enable next button
-                    buttons.forEach(button => {
-                        button.disabled = false;
-                    });
-                }
-            }, 1000);
         }
+    }, 1000);
+}
 
-        function updateProgress() {
-            const progress = (currentLayer / 5) * 100;
-            document.getElementById('progress').style.width = `${progress}%`;
-        }
+// Update progress bar
+function updateProgress() {
+    const progress = (formState.currentLayer / formState.totalLayers) * 100;
+    document.getElementById('progress').style.width = `${progress}%`;
+}
